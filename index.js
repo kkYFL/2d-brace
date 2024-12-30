@@ -13458,12 +13458,47 @@ Editor.$uid = 0;
         var e = {text: text, event: event};
         this.commands.exec("paste", this, e);
     };
+
+    this.isFormattedJSON = function(jsonString) {
+        try {
+          // 尝试解析字符串，验证其是否为合法 JSON
+          JSON.parse(jsonString);
+          // 如果包含换行符或缩进字符，则认为是格式化的
+          if (
+            jsonString.includes("\n") ||
+            jsonString.includes("\t") ||
+            / {2,}/.test(jsonString)
+          ) {
+            return true; // 是格式化的
+          } else {
+            return false; // 是非格式化的
+          }
+        } catch (error) {
+          return false;
+        }
+    }
+
+    this.isJSON = function (str) {
+        try {
+          const parsed = JSON.parse(str); // 尝试解析字符串
+          return typeof parsed === "object" && parsed !== null; // 确保是对象或数组
+        } catch (error) {
+          return false; // 捕获解析错误
+        }
+      }
     
     this.$handlePaste = function(e) {
         if (typeof e == "string") 
             e = {text: e};
         this._signal("paste", e);
         var text = e.text;
+        // JOSN且非格式化，进行格式化处理
+        if (this.isJSON(text) && !this.isFormattedJSON(text)) {
+            try {
+              var jsonObject = JSON.parse(text);
+                text = JSON.stringify(jsonObject, null, "  ");
+            } catch (error) { }
+        }
         if (!this.inMultiSelectMode || this.inVirtualSelectionMode) {
             this.insert(text);
         } else {
