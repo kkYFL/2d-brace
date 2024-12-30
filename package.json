@@ -10,9 +10,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thlorenz/brace.git"
+    "url": "https://github.com/kkYFL/2d-brace.git"
   },
-  "homepage": "https://github.com/thlorenz/brace",
+  "homepage": "https://github.com/kkYFL/2d-brace.git",
   "dependencies": {},
   "devDependencies": {
     "browserify": "~4.2.0",
